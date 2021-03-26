@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax 1 - Text file</title>
+</head>
+<body>
+    <button id="button">Get txt file</button> 
+    <br><br>
+    <div id="text"></div>   
+
+    <script>
+    //evnt listener
+    document.getElementById('button').addEventListener('click', loadText);
+
+    function loadText() {
+        //create XHTTP / xhr object
+        var xhr = new XMLHttpRequest();
+        //OPEN - type, url/file name, async or not
+        xhr.open('GET', 'sample.txt', true);
+
+        console.log('Readystate: ', xhr.readyState); //Readystate:  1
+
+        // Optional - used for loaderz
+        xhr.onprogress = function () {
+            console.log('Readystate-onprogress: ', xhr.readyState); //Readystate-onprogress:  3
+            //can dynamically add the loader here
+        }
+
+        // onload will only run when this.readyState == 4
+        xhr.onload = function(){
+        console.log('Readystate: ', xhr.readyState); //Readystate:  4
+
+            if (this.status == 200) {
+                // console.log(this.responseText);
+
+                //insert text from sample.txt to #text
+                document.getElementById('text').innerHTML = this.responseText;
+            }else if (this.status == 404) {
+                document.getElementById('text').innerHTML = 'Not Found';
+            }
+        }
+
+        //error state
+        xhr.onerror = function() {
+            console.log('Request Error');
+        }
+
+        //legacy way of HTTPRequest
+        // xhr.onreadystatechange = function () {
+        // console.log('Readystate: ', xhr.readyState);
+
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         // console.log(this.responseText);
+        //     }
+        // }
+
+        //Sendz request
+        xhr.send();
+    }
+
+    //READYSTATE Valuez
+    // 0: request not initialized
+    // 1: server connection established
+    // 2: request recieved 
+    // 3: Processing request
+    // 4: request finished and response iz ready
+
+    //HTTP STATUSES
+    //200: "OK"
+    //403: forbidden
+    //404: not found
+    </script>
+</body>
+</html>
